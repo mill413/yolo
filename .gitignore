@@ -1,8 +1,10 @@
 __pycache__/
 .ipynb*/
+
 datasets/
-logs/*.log
-models/*.pt
 runs/
-test/
+yolo*/
+
 core
+*.log
+*.pt
