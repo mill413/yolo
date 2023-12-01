@@ -20,7 +20,7 @@ def log(msg:str):
         log.write(msg+"\n" if not msg.endswith("\n") else msg)
 
 def load(model_name:str):
-    model = YOLO(f"./models/{model_name}")
+    model = YOLO(f"./models/{model_name}.yaml")
     current_time = time.strftime("%H:%M:%S", time.localtime())
     log(f"{split_line} Load model {model_name} at {current_time} {split_line}")
     return model
