@@ -6,6 +6,14 @@ models=(
 "yolov5s"
 )
 
+log_file=./logs/$(date +%Y-%m-%d)
+
+if [ ! -f ${log_file} ];then
+    touch ${log_file}
+fi
+
+echo "Program Start!" >> ${log_file}
+
 for model in ${models[*]};do
     if [ $# -eq 1 ] && [ $1=="--test" ];then
         python train.py --model $model --epochs 1
