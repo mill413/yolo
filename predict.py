@@ -11,10 +11,7 @@ parser.add_argument("--source", type=str, dest="source",
 
 args = parser.parse_args()
 
-model_name = args.model
-name = model_name.removesuffix(".pt") if model_name.endswith(".pt") else model_name.removesuffix(".yaml")
-
 predict(
-    model=YOLO(f"./{name}/train/weights/best.pt"), source=args.source,
-    project=name, name="predict")
+    model=YOLO(f"./runs/{args.model}/train/weights/best.pt"), source=args.source,
+    project=args.model, name="predict")
     

@@ -3,7 +3,6 @@ __pycache__/
 
 datasets/
 runs/
-yolo*/
 
 core
 *.log

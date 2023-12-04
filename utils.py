@@ -32,7 +32,7 @@ def train(
         batch=16,device=0,workers=2,
 ):
     log(f"Start train model on {dataset}.\nEpochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device}")
-    model.train(data=f"./datasets/{dataset}", epochs=epochs, project=project, name=name, exist_ok=exist_ok, batch=batch, device=device,workers=workers)
+    model.train(data=f"./datasets/{dataset}", epochs=epochs, project=f"runs/{project}", name=name, exist_ok=exist_ok, batch=batch, device=device,workers=workers)
     log(f"End train.")
 
     return model
@@ -40,16 +40,16 @@ def train(
 def value(
         model:YOLO,dataset:str,
         project:str,name:str="val",
-        batch=16,device=0,workers=2,
+        batch=16,device=0,workers=2, exist_ok=False
 ):
     log(f"Start value model on {dataset}.")
-    metrics = model.val(device=device, batch=batch, workers=workers,project=project,name=name)
+    metrics = model.val(device=device, batch=batch, workers=workers, project=f"runs/{project}", name=name, exist_ok=exist_ok)
     log(f"map:{metrics.box.map}")
     log(f"maps:{metrics.box.maps}")
     log(f"End value.")
 
 def predict(model:YOLO,source:str,project:str,name:str="predict",
          save=True, show_conf=False, show=False):
-    log(f"Start predict model on {source}.")
-    results = model(source, save=save, show_conf=show_conf, show=show,project=project,name=name)
+    log(f"Start predict on {source} via {project}.")
+    results = model(source, save=save, show_conf=show_conf, show=show, project=f"runs/{project}", name=name, exist_ok=True, line_width=1)
     log(f"End predict.")
