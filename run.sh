@@ -1,8 +1,8 @@
 #!/bin/zsh
 models=(
-# "yolov8m-cbam"
-# "yolov8m"
-# "yolov8m-sod"
+"yolov8m-cbam"
+"yolov8m"
+"yolov8m-sod"
 "yolov5m"
 "yolov5m-resnet"
 )

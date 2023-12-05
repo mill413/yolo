@@ -1,11 +1,12 @@
 __pycache__/
 .ipynb*/
 
-datasets/
 runs/
-
 ultralytics/
 
+/logs/*
+/datasets/*
+
+/*.log
 core
-*.log
 *.pt
