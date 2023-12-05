@@ -44,8 +44,8 @@ def value(
 ):
     log(f"Start value model on {dataset}.")
     metrics = model.val(device=device, batch=batch, workers=workers, project=f"runs/{project}", name=name, exist_ok=exist_ok)
-    log(f"map:{metrics.box.map}")
-    log(f"maps:{metrics.box.maps}")
+    log(f"map50-95:{metrics.box.map}")
+    log(f"map50:{metrics.box.map50}")
     log(f"End value.")
 
 def predict(model:YOLO,source:str,project:str,name:str="predict",

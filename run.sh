@@ -1,18 +1,19 @@
 #!/bin/zsh
 models=(
-"yolov8s-cbam"
-"yolov8s"
-"yolov8-sod"
-"yolov5s"
+# "yolov8m-cbam"
+# "yolov8m"
+# "yolov8m-sod"
+"yolov5m"
+"yolov5m-resnet"
 )
 
-log_file=./logs/$(date +%Y-%m-%d)
+log_file="./logs/$(date +%Y-%m-%d).log"
 
 if [ ! -f ${log_file} ];then
     touch ${log_file}
 fi
 
-echo "Program Start!" >> ${log_file}
+echo "\nProgram Start!" >> ${log_file}
 
 for model in ${models[*]};do
     if [ $# -eq 1 ] && [ $1=="--test" ];then
