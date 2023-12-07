@@ -1,14 +1,9 @@
 from pathlib import Path
 import time
 from ultralytics import YOLO
+from ultralytics.utils.torch_utils import get_num_params,get_flops
 
 split_line = "-------------------------------------------"
-
-config = {
-    "models": ["yolov8s.pt", "yolov8-sod.yaml"],
-    "dataset": "VisDrone.yaml",
-    "project": "test"
-}
 
 def log(msg:str):
     date = time.strftime("%Y-%m-%d", time.localtime())
@@ -31,9 +26,23 @@ def train(
         epochs=100,exist_ok=False,
         batch=16,device=0,workers=2,
 ):
-    log(f"Start train model on {dataset}.\nEpochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device}")
-    model.train(data=f"./datasets/{dataset}", epochs=epochs, project=f"runs/{project}", name=name, exist_ok=exist_ok, batch=batch, device=device,workers=workers)
-    log(f"End train.")
+    log(f"Start train model on {dataset}.\n"+
+        f"Epochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device}"+
+        f"Paras:{get_num_params(model)}"+
+        f"Save to runs/{project}/{name}")
+    try:
+        model.train(
+            data=f"./datasets/{dataset}.yaml", 
+            epochs=epochs, 
+            project=f"runs/{project}", name=name, 
+            exist_ok=exist_ok, 
+            batch=batch, 
+            device=device,
+            workers=workers)
+    except Exception as e:
+        log(f"Error {e} occured in training!")
+    finally:
+        log(f"End train.")
 
     return model
 
@@ -43,7 +52,13 @@ def value(
         batch=16,device=0,workers=2, exist_ok=False
 ):
     log(f"Start value model on {dataset}.")
-    metrics = model.val(device=device, batch=batch, workers=workers, project=f"runs/{project}", name=name, exist_ok=exist_ok)
+    metrics = model.val(
+        data=f"./datasets/{dataset}.yaml",
+        device=device, 
+        batch=batch, 
+        workers=workers, 
+        project=f"runs/{project}", name=name, 
+        exist_ok=exist_ok)
     log(f"map50-95:{metrics.box.map}")
     log(f"map50:{metrics.box.map50}")
     log(f"End value.")
@@ -51,5 +66,12 @@ def value(
 def predict(model:YOLO,source:str,project:str,name:str="predict",
          save=True, show_conf=False, show=False):
     log(f"Start predict on {source} via {project}.")
-    results = model(source, save=save, show_conf=show_conf, show=show, project=f"runs/{project}", name=name, exist_ok=True, line_width=1)
+    results = model(
+        source, 
+        save=save, 
+        show_conf=show_conf, 
+        show=show, 
+        project=f"runs/{project}", name=name, 
+        exist_ok=True, 
+        line_width=1)
     log(f"End predict.")

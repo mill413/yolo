@@ -4,9 +4,10 @@ __pycache__/
 runs/
 ultralytics/
 
-/logs/*
-/datasets/*
-
 /*.log
 core
 *.pt
+
+!.gitignore
+!logs/
+!datasets/

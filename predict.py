@@ -1,6 +1,6 @@
 from ultralytics import YOLO
-from utils import predict, config
-import argparse, os
+from utils import predict
+import argparse
 
 parser = argparse.ArgumentParser(description="Predict model parse arguments.")
 
@@ -12,6 +12,7 @@ parser.add_argument("--source", type=str, dest="source",
 args = parser.parse_args()
 
 predict(
-    model=YOLO(f"./runs/{args.model}/train/weights/best.pt"), source=args.source,
+    model=YOLO(f"./runs/{args.model}/train/weights/best.pt"), 
+    source=args.source,
     project=args.model, name="predict")
     
