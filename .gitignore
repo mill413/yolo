@@ -1,8 +1,7 @@
-__pycache__/
-.ipynb*/
+**/__pycache__/
+**/.ipynb*/
 
 runs/
-ultralytics/
 
 *.log
 core
