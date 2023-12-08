@@ -24,7 +24,7 @@ for model in "${models[@]}";do
         python value.py --model "$model" --dataset $dataset
        	python predict.py --model "$model" --source $test_source
     elif [ $# -eq 0 ];then
-        python train.py --model "$model" --dataset $dataset --epochs 200 --workers 8 --batch 16
+        python train.py --model "$model" --dataset $dataset --epochs 200 --workers 8 --batch 8
         python value.py --model "$model" --dataset $dataset
     fi 
 done
