@@ -27,8 +27,8 @@ def train(
         batch=16,device=0,workers=2,
 ):
     log(f"Start train model on {dataset}.\n"+
-        f"Epochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device}"+
-        f"Paras:{get_num_params(model)}"+
+        f"Epochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device} "+
+        f"Paras:{get_num_params(model)}\n"+
         f"Save to runs/{project}/{name}")
     try:
         model.train(
