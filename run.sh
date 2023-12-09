@@ -1,14 +1,16 @@
 #!/bin/bash
 models=(
-# "yolov8m-cbam"
+"yolov8m-cbam"
 # "yolov8m"
 # "yolov8m-p2"
 # "yolov5m"
 # "yolov5m-resnet"
-"yolov5m-p2"
+# "yolov5m-p2"
+# "yolov5m-p234"
+"yolov5m-cbam"
 )
 
-dataset="VisDrone"
+dataset="flir"
 test_source="/home/wsy_2022301480/jupyterlab/datasets/FLIR/test/data/video-4FRnNpmSmwktFJKjg-frame-000745-L6K5SC6fYjHNC8uff.jpg"
 log_file="./logs/$(date +%Y-%m-%d).log"
 
@@ -24,7 +26,7 @@ for model in "${models[@]}";do
         python value.py --model "$model" --dataset $dataset
        	python predict.py --model "$model" --source $test_source
     elif [ $# -eq 0 ];then
-        python train.py --model "$model" --dataset $dataset --epochs 200 --workers 8 --batch 16
+        python train.py --model "$model" --dataset $dataset --epochs 100 --workers 8 --batch 8
         python value.py --model "$model" --dataset $dataset
     fi 
 done
