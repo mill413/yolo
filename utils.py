@@ -1,9 +1,9 @@
 from pathlib import Path
 import time
 from ultralytics import YOLO
-from ultralytics.utils.torch_utils import get_num_params,get_flops
+from ultralytics.utils.torch_utils import get_num_params
 
-split_line = "-------------------------------------------"
+split_line = "------------------------------------------"
 
 def log(msg:str):
     date = time.strftime("%Y-%m-%d", time.localtime())
@@ -27,8 +27,8 @@ def train(
         batch=16,device=0,workers=2,
 ):
     log(f"Start train model on {dataset}.\n"+
-        f"Epochs:{epochs} Batch:{batch} Workers:{workers} Exist_ok:{exist_ok} Device:{device} "+
-        f"Paras:{get_num_params(model)}\n"+
+        f"Epochs: {epochs} Batch: {batch} Workers: {workers} Exist_ok: {exist_ok} Device: {device} "+
+        f"Paras: {get_num_params(model)/1000000}M\n"+
         f"Save to runs/{project}/{name}")
     try:
         model.train(
@@ -59,8 +59,8 @@ def value(
         workers=workers, 
         project=f"runs/{project}", name=name, 
         exist_ok=exist_ok)
-    log(f"map50-95:{metrics.box.map}")
-    log(f"map50:{metrics.box.map50}")
+    log(f"map50-95: {metrics.box.map}")
+    log(f"map50: {metrics.box.map50}")
     log(f"End value.")
 
 def predict(model:YOLO,source:str,project:str,name:str="predict",
