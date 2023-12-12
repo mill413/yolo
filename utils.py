@@ -25,6 +25,7 @@ def train(
         project:str,name:str="train",
         epochs=100,exist_ok=False,
         batch=16,device=0,workers=2,
+        patience=50
 ):
     log(f"Start train model on {dataset}.\n"+
         f"Epochs: {epochs} Batch: {batch} Workers: {workers} Exist_ok: {exist_ok} Device: {device} "+
@@ -38,7 +39,8 @@ def train(
             exist_ok=exist_ok, 
             batch=batch, 
             device=device,
-            workers=workers)
+            workers=workers,
+            patience=patience)
     except Exception as e:
         log(f"Error {e} occured in training!")
     finally:
