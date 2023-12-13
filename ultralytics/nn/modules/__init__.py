@@ -27,6 +27,7 @@ from .transformer import (AIFI, MLP, DeformableTransformerDecoder, DeformableTra
 
 from .resnet import (resnet501, resnet502, resnet503)
 from .CBAMBottleneck import CBAMBottleneck
+from .ACmix import ACmix
 
 __all__ = ('Conv', 'Conv2', 'LightConv', 'RepConv', 'DWConv', 'DWConvTranspose2d', 'ConvTranspose', 'Focus',
            'GhostConv', 'ChannelAttention', 'SpatialAttention', 'CBAM', 'Concat', 'TransformerLayer',
