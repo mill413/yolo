@@ -6,7 +6,6 @@ runs/
 *.log
 *.pt
 core
-run.sh
 
 !.gitignore
 !logs/
