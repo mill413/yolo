@@ -4,8 +4,9 @@
 runs/
 
 *.log
-core
 *.pt
+core
+run.sh
 
 !.gitignore
 !logs/
