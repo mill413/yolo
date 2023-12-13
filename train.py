@@ -11,7 +11,7 @@ parser.add_argument("--epochs", type=int, default=100,
                     help="train epochs", dest="epochs")
 parser.add_argument("--workers", type=int, default=4,
                     help="train workers", dest="workers")
-parser.add_argument("--batch", type=int, default=16,
+parser.add_argument("--batch", type=int, default=8,
                     help="train batch", dest="batch")
 parser.add_argument("--project", type=str, default="",
                     help="results save dir", dest="project")
