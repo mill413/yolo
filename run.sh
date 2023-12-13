@@ -8,7 +8,7 @@ models=(
 )
 
 dataset="VisDrone"
-test_source="/home/haruto/Document/datasets/VisDrone/VisDrone2019-DET-test-dev/images/0000006_00159_d_0000001.jpg"
+test_source="$DATASET/VisDrone/VisDrone2019-DET-test-dev/images/0000006_00159_d_0000001.jpg"
 log_file="./logs/$(date +%Y-%m-%d).log"
 
 if [ ! -f "${log_file}" ];then
