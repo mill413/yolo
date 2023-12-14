@@ -2,6 +2,7 @@ from pathlib import Path
 import time
 from ultralytics import YOLO
 from ultralytics.utils.torch_utils import get_num_params
+import traceback
 
 split_line = "------------------------------------------"
 
@@ -45,7 +46,8 @@ def train(
             workers=workers,
             patience=patience)
     except Exception as e:
-        log(f"Error {e} occured in training!")
+        log("=======")
+        log(f"{traceback.format_exc()}")
     finally:
         log(f"End train.")
 

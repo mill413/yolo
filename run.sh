@@ -4,7 +4,7 @@ models=(
 # "yolov5s-p234"
 # "yolov5m-cbam"
 # "yolov5s-cbam-p234"
-"yolov8s-acmix"
+"yolov5s-tph"
 )
 
 dataset="VisDrone"
@@ -15,11 +15,11 @@ if [ ! -f "${log_file}" ];then
     touch "${log_file}"
 fi
 
-printf "\nProgram Start!" >> "${log_file}"
+printf "\nProgram Start!\n" >> "${log_file}"
 
 for model in "${models[@]}";do
     if [ $# -eq 1 ] && [ "$1" == "--test" ];then
-        python train.py --model "$model" --dataset $dataset --epochs 1 --workers 4 --batch 2
+        python train.py --model "$model" --dataset $dataset --epochs 1 --workers 8 --batch 16
         python value.py --model "$model" --dataset $dataset
        	# python predict.py --model "$model" --source $test_source
     elif [ $# -eq 0 ];then

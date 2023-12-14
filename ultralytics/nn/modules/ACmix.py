@@ -1,6 +1,5 @@
 # acmix
 import torch.nn.functional as F
-import time
 import torch
 import torch.nn as nn
 
@@ -16,7 +15,6 @@ def position(H, W, is_cuda=True):
 
 
 def stride(x, stride):
-    b, c, h, w = x.shape
     return x[:, :, ::stride, ::stride]
 
 def init_rate_half(tensor):
