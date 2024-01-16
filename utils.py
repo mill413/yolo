@@ -33,7 +33,7 @@ def train(
 ):
     log(f"Start train model on {dataset}.\n" +
         f"Epochs: {epochs} Batch: {batch} Workers: {workers} Exist_ok: {exist_ok} Device: {device} " +
-        f"Paras: {get_num_params(model)/1000000}M\n" +
+        f"Paras: {get_num_params(model)/1000000:.3f}M\n" +
         f"Save to runs/{project}/{name}")
     try:
         model.train(
@@ -67,8 +67,8 @@ def value(
         workers=workers,
         project=f"runs/{project}", name=name,
         exist_ok=exist_ok)
-    log(f"map50-95: {metrics.box.map}")
-    log(f"map50: {metrics.box.map50}")
+    log(f"map50-95: {metrics.box.map:.2f}")
+    log(f"map50: {metrics.box.map50:.2f}")
     log(f"End value.")
 
 
