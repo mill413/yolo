@@ -10,3 +10,4 @@ core
 !.gitignore
 !logs/
 !datasets/
+run.sh
