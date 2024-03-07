@@ -67,8 +67,19 @@ def value(
         workers=workers,
         project=f"runs/{project}", name=name,
         exist_ok=exist_ok)
-    log(f"map50-95: {metrics.box.map:.2f}")
-    log(f"map50: {metrics.box.map50:.2f}")
+    
+    # print value results
+    class_names = model.names
+    log(f"{'Class':>22s}\t{'Precision':>11s}\t{'Recall':>11s}\t{'mAP50':>11s}\t{'mAP50-95':>11s}")
+    for i, c in enumerate(metrics.ap_class_index):
+        name = class_names[c]
+        result = metrics.class_result(i)
+        precision = result[0]
+        recall = result[1]
+        map50 = result[2]
+        map = result[3]
+        log(f"{name:>22s}\t{precision:11.3g}\t{recall:11.3g}\t{map50:11.3g}\t{map:11.3g}")
+
     log(f"End value.")
 
 
