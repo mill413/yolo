@@ -71,6 +71,8 @@ def value(
     # print value results
     class_names = model.names
     log(f"{'Class':>22s}\t{'Precision':>11s}\t{'Recall':>11s}\t{'mAP50':>11s}\t{'mAP50-95':>11s}")
+    mean_result = metrics.mean_results()
+    log(f"{'all':>22s}\t{mean_result[0]:11.3g}\t{mean_result[1]:11.3g}\t{mean_result[2]:11.3g}\t{mean_result[3]:11.3g}")
     for i, c in enumerate(metrics.ap_class_index):
         name = class_names[c]
         result = metrics.class_result(i)
