@@ -70,9 +70,10 @@ def value(
     
     # print value results
     class_names = model.names
-    log(f"{'Class':>22s}\t{'Precision':>11s}\t{'Recall':>11s}\t{'mAP50':>11s}\t{'mAP50-95':>11s}")
+    log(f"|{'Class|':>22s}\t{'Precision|':>11s}\t{'Recall|':>11s}\t{'mAP50|':>11s}\t{'mAP50-95|':>11s}")
+    log(f"|{'---:|':>22s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}")
     mean_result = metrics.mean_results()
-    log(f"{'all':>22s}\t{mean_result[0]:11.3g}\t{mean_result[1]:11.3g}\t{mean_result[2]:11.3g}\t{mean_result[3]:11.3g}")
+    log(f"|{'all|':>22s}\t{mean_result[0]:10.3g}|\t{mean_result[1]:10.3g}|\t{mean_result[2]:10.3g}|\t{mean_result[3]:10.3g}|")
     for i, c in enumerate(metrics.ap_class_index):
         name = class_names[c]
         result = metrics.class_result(i)
@@ -80,7 +81,7 @@ def value(
         recall = result[1]
         map50 = result[2]
         map = result[3]
-        log(f"{name:>22s}\t{precision:11.3g}\t{recall:11.3g}\t{map50:11.3g}\t{map:11.3g}")
+        log(f"|{name+'|':>22s}\t{precision:10.3g}|\t{recall:10.3g}|\t{map50:10.3g}|\t{map:10.3g}|")
 
     log(f"End value.")
 
