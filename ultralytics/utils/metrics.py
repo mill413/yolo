@@ -14,6 +14,42 @@ from ultralytics.utils import LOGGER, SimpleClass, TryExcept, plt_settings
 OKS_SIGMA = np.array([.26, .25, .25, .35, .35, .79, .79, .72, .72, .62, .62, 1.07, 1.07, .87, .87, .89, .89]) / 10.0
 
 
+def NWD_loss(pred, target, eps=1e-7, constant=12.8):
+    r"""`Implementation of paper `Enhancing Geometric Factors into
+    Model Learning and Inference for Object Detection and Instance
+    Segmentation <https://arxiv.org/abs/2005.03572>`_.
+    Code is modified from https://github.com/Zzh-tju/CIoU.
+    Args:
+        pred (Tensor): Predicted bboxes of format (x_center, y_center, w, h),
+            shape (n, 4).
+        target (Tensor): Corresponding gt bboxes, shape (n, 4).
+        eps (float): Eps to avoid log(0).
+    Return:
+        Tensor: Loss tensor.
+    """
+    # yolo v8 xyxy  to xywh
+    pred = torch.stack(((pred[0]+pred[2])/2, (pred[1]+pred[3])/2,
+                       pred[2]-pred[0], pred[3]-pred[1]), dim=-1)
+    pred = torch.stack(((target[0] + target[2]) / 2, (target[1] + target[3]) /
+                       2, target[2] - target[0], target[3] - target[1]), dim=-1)
+
+    center1 = pred[:, :2]
+    center2 = target[:, :2]
+
+    whs = center1[:, :2] - center2[:, :2]
+
+    center_distance = whs[:, 0] * whs[:, 0] + whs[:, 1] * whs[:, 1] + eps  #
+
+    w1 = pred[:, 2] + eps
+    h1 = pred[:, 3] + eps
+    w2 = target[:, 2] + eps
+    h2 = target[:, 3] + eps
+
+    wh_distance = ((w1 - w2) ** 2 + (h1 - h2) ** 2) / 4
+
+    wasserstein_2 = center_distance + wh_distance
+    return torch.exp(-torch.sqrt(wasserstein_2) / constant)
+
 def bbox_ioa(box1, box2, iou=False, eps=1e-7):
     """
     Calculate the intersection over box2 area given box1 and box2. Boxes are in x1y1x2y2 format.
