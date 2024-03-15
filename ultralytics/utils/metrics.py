@@ -28,10 +28,10 @@ def NWD_loss(pred, target, eps=1e-7, constant=12.8):
         Tensor: Loss tensor.
     """
     # yolo v8 xyxy  to xywh
-    pred = torch.stack(((pred[0]+pred[2])/2, (pred[1]+pred[3])/2,
-                       pred[2]-pred[0], pred[3]-pred[1]), dim=-1)
-    pred = torch.stack(((target[0] + target[2]) / 2, (target[1] + target[3]) /
-                       2, target[2] - target[0], target[3] - target[1]), dim=-1)
+    # pred = torch.stack(((pred[0]+pred[2])/2, (pred[1]+pred[3])/2,
+    #                    pred[2]-pred[0], pred[3]-pred[1]), dim=-1)
+    # pred = torch.stack(((target[0] + target[2]) / 2, (target[1] + target[3]) /
+    #                    2, target[2] - target[0], target[3] - target[1]), dim=-1)
 
     center1 = pred[:, :2]
     center2 = target[:, :2]
