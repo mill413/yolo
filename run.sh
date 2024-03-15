@@ -1,10 +1,10 @@
 #!/bin/bash
 models=(
-    "yolov5n"
-    "yolov5s"
-    "yolov5m"
-    "yolov8n"
-    "yolov8s"
+    # "yolov5n-p2"
+    "yolov5s-p2"
+    "yolov5m-p2"
+    "yolov8n-p2"
+    "yolov8s-p2"
 )
 
 dataset="flir"
