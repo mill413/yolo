@@ -97,15 +97,15 @@ if [ ! -f "${log_file}" ]; then
     touch "${log_file}"
 fi
 
-printf "\nProgram Start!\n" >>"${log_file}"
+printf "\n>>> Models (%s) in %s on %s Start! <<<\n" "${models[*]}" "$prefix" "${dataset^^}" >>"${log_file}"
 
-for model in "${models[@]}"; do
-    model_path="$prefix$model"
-    if [ $# -eq 1 ] && [ $test == 1 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
-        python value.py --model "$model_path" --dataset "$dataset"
-    elif [ $# -eq 0 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 8 --batch 8
-        python value.py --model "$model_path" --dataset "$dataset"
-    fi
-done
+# for model in "${models[@]}"; do
+#     model_path="$prefix$model"
+#     if [ $# -eq 1 ] && [ $test == 1 ]; then
+#         python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
+#         python value.py --model "$model_path" --dataset "$dataset"
+#     elif [ $# -eq 0 ]; then
+#         python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 8 --batch 8
+#         python value.py --model "$model_path" --dataset "$dataset"
+#     fi
+# done
