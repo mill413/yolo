@@ -6,8 +6,8 @@ help(){
         [ -t | --test] \t\t Test models with 1 epoch, 1 worker, 1 batch \n \
         [ -p | --prefix] \t\t Models' relative path \n \
         [ -d | --dataset ] \t\t Dataset's path \n \
-        [ --v5 ] \t\t The scales of yolov5.
-        [ --v8 ] \t\t The scales of yolov8. 
+        [ --v5 ] \t\t The scales of yolov5. \n \
+        [ --v8 ] \t\t The scales of yolov8. \n \
         [ -h | --help] \t\t Get options info \n \
         "
     echo -e "$info"
