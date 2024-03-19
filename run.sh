@@ -18,9 +18,10 @@ prefix=""
 test=0
 dataset=""
 models=()
+nwd=0
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8: -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd: -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -81,6 +82,10 @@ while true; do
                 scale=${v8_scales:$i-1:1}
                 models+=("yolov8$scale")
             done
+            shift 2
+            ;;
+        --nwd)
+            nwd="$2"
             shift 2
             ;;
         --) 
