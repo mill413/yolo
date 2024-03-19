@@ -21,7 +21,7 @@ models=()
 nwd=0
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd: -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -85,8 +85,8 @@ while true; do
             shift 2
             ;;
         --nwd)
-            nwd="$2"
-            shift 2
+            nwd=1
+            shift
             ;;
         --) 
             shift
@@ -102,15 +102,21 @@ if [ ! -f "${log_file}" ]; then
     touch "${log_file}"
 fi
 
-printf "\n>>> Models (%s) in %s on %s Start! <<<\n" "${models[*]}" "$prefix" "${dataset^^}" >>"${log_file}"
+nwd_str=""
+if [ $nwd == 0 ]; then
+    nwd_str="OFF"
+else
+    nwd_str="ON"
+fi
+printf "\n>>> Models (%s) in %s on %s with NWD-%s Start! <<<\n" "${models[*]}" "$prefix" "${dataset^^}" >>"${log_file}" "$nwd_str"
 
-for model in "${models[@]}"; do
-    model_path="$prefix$model"
-    if [ $# -eq 1 ] && [ $test == 1 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
-        python value.py --model "$model_path" --dataset "$dataset"
-    elif [ $# -eq 0 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 8 --batch 8
-        python value.py --model "$model_path" --dataset "$dataset"
-    fi
-done
+# for model in "${models[@]}"; do
+#     model_path="$prefix$model"
+#     if [ $# -eq 1 ] && [ $test == 1 ]; then
+#         python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
+#         python value.py --model "$model_path" --dataset "$dataset"
+#     elif [ $# -eq 0 ]; then
+#         python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 8 --batch 8
+#         python value.py --model "$model_path" --dataset "$dataset"
+#     fi
+# done
