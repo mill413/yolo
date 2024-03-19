@@ -61,7 +61,7 @@ class FocalLoss(nn.Module):
 class BboxLoss(nn.Module):
     """Criterion class for computing training losses during training."""
 
-    def __init__(self, reg_max, use_dfl=False, use_nwd=True):
+    def __init__(self, reg_max, use_dfl=False, use_nwd=False):
         """Initialize the BboxLoss module with regularization maximum and DFL settings."""
         super().__init__()  
         self.reg_max = reg_max
