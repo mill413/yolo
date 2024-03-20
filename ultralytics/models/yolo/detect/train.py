@@ -66,9 +66,9 @@ class DetectionTrainer(BaseTrainer):
         self.model.args = self.args  # attach hyperparameters to model
         # TODO: self.model.class_weights = labels_to_class_weights(dataset.labels, nc).to(device) * nc
 
-    def get_model(self, cfg=None, weights=None, verbose=True, use_nwd=False):
+    def get_model(self, cfg=None, weights=None, verbose=True):
         """Return a YOLO detection model."""
-        model = DetectionModel(cfg, nc=self.data['nc'], verbose=verbose and RANK == -1, use_nwd=use_nwd)
+        model = DetectionModel(cfg, nc=self.data['nc'], verbose=verbose and RANK == -1)
         if weights:
             model.load(weights)
         return model
