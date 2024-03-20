@@ -74,6 +74,8 @@ class BboxLoss(nn.Module):
         # iou = bbox_iou(pred_bboxes[fg_mask], target_bboxes[fg_mask], xywh=False, CIoU=True)
         # loss_iou = ((1.0 - iou) * weight).sum() / target_scores_sum
         if self.NWD:
+            # print("Using NWD Loss!!")
+            
             nwd = NWD_loss(pred_bboxes[fg_mask],
                            target_bboxes[fg_mask]).squeeze()
             iou_ratio = 0.5
@@ -136,7 +138,7 @@ class KeypointLoss(nn.Module):
 class v8DetectionLoss:
     """Criterion class for computing training losses."""
 
-    def __init__(self, model):  # model must be de-paralleled
+    def __init__(self, model, use_nwd=False):  # model must be de-paralleled
         """Initializes v8DetectionLoss with the model, defining model-related properties and BCE loss function."""
         device = next(model.parameters()).device  # get model device
         h = model.args  # hyperparameters
@@ -152,8 +154,10 @@ class v8DetectionLoss:
 
         self.use_dfl = m.reg_max > 1
 
+        self.use_nwd = use_nwd
+
         self.assigner = TaskAlignedAssigner(topk=10, num_classes=self.nc, alpha=0.5, beta=6.0)
-        self.bbox_loss = BboxLoss(m.reg_max - 1, use_dfl=self.use_dfl).to(device)
+        self.bbox_loss = BboxLoss(m.reg_max - 1, use_dfl=self.use_dfl, use_nwd=self.use_nwd).to(device)
         self.proj = torch.arange(m.reg_max, dtype=torch.float, device=device)
 
     def preprocess(self, targets, batch_size, scale_tensor):
