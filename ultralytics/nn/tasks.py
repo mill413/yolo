@@ -12,7 +12,7 @@ from ultralytics.nn.modules import (AIFI, C1, C2, C3, C3TR, SPP, SPPF, Bottlenec
                                     Focus, GhostBottleneck, GhostConv, HGBlock, HGStem, Pose, RepC3, RepConv,
                                     RTDETRDecoder, Segment, CBAM, 
                                     resnet501, resnet502, resnet503,
-                                    SEAttention, GAM, ECA)
+                                    SEAttention, GAM, ECA, CA)
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
 from ultralytics.utils.loss import v8ClassificationLoss, v8DetectionLoss, v8PoseLoss, v8SegmentationLoss
@@ -718,7 +718,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args.insert(1, [ch[x] for x in f])
         elif m is resnet501 or m is resnet502 or m is resnet503:
             c2 = args[0]
-        elif m in (CBAM, SEAttention, ECA):
+        elif m in (CBAM, SEAttention, ECA, CA):
             c1, c2 = ch[f], args[0]
             if c2 != nc:  # if c2 not equal to number of classes (i.e. for Classify() output)
                 c2 = make_divisible(min(c2, max_channels) * width, 8)
