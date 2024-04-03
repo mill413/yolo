@@ -28,7 +28,6 @@ while true; do
         -h|--help)
             help
             ;;
-
         -p|--prefix)
             prefix="$2"
             if [[ "$prefix" != *"/" ]]; then
@@ -44,7 +43,6 @@ while true; do
             fi
             shift 2
             ;;
-
         -t|--test)
             test=1
             shift
@@ -94,13 +92,13 @@ while true; do
     esac
 done
 
-# echo "prefix=$prefix test=$test dataset=$dataset models=${models[*]}"
-
+# create log file if not exist.
 log_file="./logs/$(date +%Y-%m-%d).log"
 if [ ! -f "${log_file}" ]; then
     touch "${log_file}"
 fi
 
+# mark whether nwd is in use
 nwd_str=""
 if [ $nwd == 0 ]; then
     nwd_str="OFF"
@@ -115,6 +113,7 @@ for model in "${models[@]}"; do
         python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
         python value.py --model "$model_path" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
+        # if model is yolov5m, batch should be 8
         batch=16
         if [ "$model" == "yolov5m" ];then
             batch=8
