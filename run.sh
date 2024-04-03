@@ -113,9 +113,9 @@ for model in "${models[@]}"; do
         python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
         python value.py --model "$model_path" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
-        # if model is yolov5m, batch should be 8
+        # if model's scale is m, batch should be 8
         batch=16
-        if [ "$model" == "yolov5m" ];then
+        if [[ "$model" == *"m" ]];then
             batch=8
         fi
 
