@@ -49,7 +49,6 @@ while true; do
             test=1
             shift
             ;;
-        
         -d|--dataset)
             dataset="$2"
             # wheth dataset is valid
@@ -116,7 +115,12 @@ for model in "${models[@]}"; do
         python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
         python value.py --model "$model_path" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 8 --batch 8
+        batch=16
+        if [ "$model" == "yolov5m" ];then
+            batch=8
+        fi
+
+        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch $batch
         python value.py --model "$model_path" --dataset "$dataset"
     fi
 done
