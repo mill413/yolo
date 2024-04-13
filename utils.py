@@ -8,8 +8,8 @@ split_line = "------------------------------------------"
 
 class YoloLogger:
     def __init__(self, model_name: str) -> None:
-        self.model = model_name
-        self._logs_dir_path = Path(f"./logs/{self.model}")
+        self._model = model_name
+        self._logs_dir_path = Path(f"./logs/{self._model}")
     
     def log(self, msg: str):
         date = time.strftime("%Y-%m-%d", time.localtime())
