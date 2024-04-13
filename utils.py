@@ -6,18 +6,24 @@ import traceback
 
 split_line = "------------------------------------------"
 
+class YoloLogger:
+    def __init__(self, model_name: str) -> None:
+        self.model = model_name
+        self._logs_dir_path = Path(f"./logs/{self.model}")
+    
+    def log(self, msg: str):
+        date = time.strftime("%Y-%m-%d", time.localtime())
+        log_file = self._logs_dir_path / f"{date}.log"
+        log_file.touch()
 
-def log(msg: str):
-    date = time.strftime("%Y-%m-%d", time.localtime())
-    log_file = Path(f"./logs/{date}.log")
-    log_file.touch()
-
-    with open(log_file, mode="a+") as log:
-        print(msg)
-        log.write(msg+"\n" if not msg.endswith("\n") else msg)
+        with open(log_file, mode="a+") as log:
+            print(msg)
+            log.write(msg+"\n" if not msg.endswith("\n") else msg)
 
 
 def load(model_name: str):
+    logger = YoloLogger(model_name=f"{model_name}")
+    log = logger.log
     model = YOLO(f"./models/{model_name}.yaml")
     current_time = time.strftime("%H:%M:%S", time.localtime())
     log(f"{split_line} Load model {model_name} at {current_time} {split_line}")
@@ -31,8 +37,10 @@ def train(
         batch=16, device=0, workers=2,
         patience=50
 ):
+    logger = YoloLogger(model_name=f"{project}")
+    log = logger.log
     log(f"Start train model on {dataset}.\n" +
-        f"Epochs: {epochs} Batch: {batch} Workers: {workers} Exist_ok: {exist_ok} Device: {device} " +
+        f"Epochs: {epochs}, Batch: {batch}, Workers: {workers}, Exist_ok: {exist_ok}, Device: {device}, " +
         f"Paras: {get_num_params(model)/1000000:.3f}M\n" +
         f"Save to runs/{project}/{name}")
     try:
@@ -55,10 +63,12 @@ def train(
 
 
 def value(
-        model: YOLO, dataset: str,
-        project: str, name: str = "val",
-        batch=16, device=0, workers=2, exist_ok=False
+    model: YOLO, dataset: str,
+    project: str, name: str = "val",
+    batch=16, device=0, workers=2, exist_ok=False
 ):
+    logger = YoloLogger(model_name=f"{project}")
+    log = logger.log
     log(f"Start value model on {dataset}.")
     metrics = model.val(
         data=f"./datasets/{dataset}.yaml",
@@ -86,8 +96,11 @@ def value(
     log(f"End value.")
 
 
-def predict(model: YOLO, source: str, project: str, name: str = "predict",
+def predict(
+        model: YOLO, source: str, project: str, name: str = "predict",
             save=True, show_conf=False, show=False):
+    logger = YoloLogger(model_name=f"{project}")
+    log = logger.log
     log(f"Start predict on {source} via {project}.")
     results = model(
         source,
