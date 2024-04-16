@@ -10,6 +10,7 @@ class YoloLogger:
     def __init__(self, model_name: str) -> None:
         self._model = model_name
         self._logs_dir_path = Path(f"./logs/{self._model}")
+        self._logs_dir_path.mkdir(parents=True, exist_ok=True)
     
     def log(self, msg: str):
         date = time.strftime("%Y-%m-%d", time.localtime())
