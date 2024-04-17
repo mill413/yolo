@@ -19,9 +19,10 @@ test=0
 dataset=""
 models=()
 nwd=0
+batch=8
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd,batch: -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -33,7 +34,7 @@ while true; do
             if [[ "$prefix" != *"/" ]]; then
                 prefix="$prefix/"
             fi
-            # wheth prefix is valid
+            # whether prefix is valid
             if [ "$prefix" == "" ]; then
                 echo "Lack of prefix option!"
                 exit 0
@@ -85,6 +86,14 @@ while true; do
             nwd=1
             shift
             ;;
+        --batch)
+            batch="$2"
+            if [ "$batch" == "" ]; then
+                echo "batch number is need!"
+                exit 0
+            fi
+            shift 2
+            ;;
         --) 
             shift
             break
@@ -114,12 +123,11 @@ for model in "${models[@]}"; do
         python value.py --model "$model_path" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
         # if model's scale is m, batch should be 8
-        batch=16
         if [[ "$model" == *"m" ]];then
             batch=8
         fi
 
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch $batch
+        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch"
         python value.py --model "$model_path" --dataset "$dataset"
     fi
 done
