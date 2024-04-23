@@ -99,7 +99,8 @@ def value(
 
 def predict(
         model: YOLO, source: str, project: str, name: str = "predict",
-            save=True, show_conf=False, show=False):
+            save=True, 
+            show_conf=False, show=False, show_labels=False):
     logger = YoloLogger(model_name=f"{project}")
     log = logger.log
     log(f"Start predict on {source} via {project}.")
@@ -108,6 +109,7 @@ def predict(
         save=save,
         show_conf=show_conf,
         show=show,
+        show_labels=show_labels,
         project=f"runs/{project}", name=name,
         exist_ok=True,
         line_width=1)
