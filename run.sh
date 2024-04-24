@@ -20,9 +20,15 @@ dataset=""
 models=()
 nwd=0
 batch=8
+predict=0
+declare -A source
+source=(
+    [visdrone]="../datasets/VisDrone/VisDrone2019-DET-test-dev/images/"
+    [flir]="../datasets/FLIR/test/data/"
+)
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd,batch: -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd,batch:,predict -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -94,6 +100,10 @@ while true; do
             fi
             shift 2
             ;;
+        --predict)
+            predict=1
+            shift
+            ;;
         --) 
             shift
             break
@@ -127,7 +137,11 @@ for model in "${models[@]}"; do
             batch=8
         fi
 
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch"
+        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch" &&
         python value.py --model "$model_path" --dataset "$dataset"
+
+        if [[ "$predict" == 1 ]];then
+            python predict.py --model "${model_path}/${dataset}/train" --source "${source[$dataset]}"
+        fi
     fi
 done
