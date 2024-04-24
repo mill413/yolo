@@ -141,7 +141,7 @@ for model in "${models[@]}"; do
         python value.py --model "$model_path" --dataset "$dataset"
 
         if [[ "$predict" == 1 ]];then
-            python predict.py --model "${model_path}/${dataset}/train" --source "${source[$dataset]}"
+            python predict.py --model "${model_path}/${dataset}" --source "${source[$dataset]}"
         fi
     fi
 done
