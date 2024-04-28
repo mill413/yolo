@@ -101,7 +101,11 @@ while true; do
             shift 2
             ;;
         --predict)
-            predict=1
+            if [ -n "${source[$dataset]}" ];then
+                predict=0
+            else
+                predict=1
+            fi
             shift
             ;;
         --) 
