@@ -19,7 +19,7 @@ test=0
 dataset=""
 models=()
 nwd=0
-batch=8
+batch=16
 predict=0
 declare -A source
 source=(
