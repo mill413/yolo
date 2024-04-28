@@ -142,7 +142,7 @@ for model in "${models[@]}"; do
         fi
 
         python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch" &&
-        python value.py --model "${model_path}/${dataset}" --dataset "$dataset"
+        python value.py --model "${model_path}" --dataset "$dataset"
 
         if [[ "$predict" == 1 ]];then
             python predict.py --model "${model_path}/${dataset}" --source "${source[$dataset]}"
