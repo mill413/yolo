@@ -1,4 +1,4 @@
-from utils import load, train
+from utils import train
 import argparse
 
 parser = argparse.ArgumentParser(description="Train model parse arguments.")
@@ -21,7 +21,8 @@ args = parser.parse_args()
 model_name = args.model
 project = args.project if not args.project == "" else model_name
 
-model = train(model=load(model_name), dataset=args.dataset,
-              project=f"{project}/{args.dataset}", name="train",
-              epochs=args.epochs, exist_ok=True, batch=args.batch, workers=args.workers,
+model = train(model=model_name, dataset=args.dataset,
+              result_dir=f"{project}/{args.dataset}", mode="train",
+              epochs=args.epochs, exist_ok=True, 
+              batch=args.batch, workers=args.workers,
               patience=50)

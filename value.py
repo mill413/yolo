@@ -17,6 +17,7 @@ model_name = args.model
 project = args.project if not args.project == "" else model_name
 
 value(
-    model=YOLO(f"./runs/{project}/{args.dataset}/train/weights/best.pt"), dataset=args.dataset,
-    project=f"{project}/{args.dataset}", name="val", exist_ok=True)
+    model=model_name, dataset=args.dataset,
+    result_dir=f"{project}/{args.dataset}", mode="val", 
+    exist_ok=True)
     

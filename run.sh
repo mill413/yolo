@@ -121,31 +121,24 @@ if [ ! -f "${log_file}" ]; then
     touch "${log_file}"
 fi
 
-# mark whether nwd is in use
-nwd_str=""
-if [ $nwd == 0 ]; then
-    nwd_str="OFF"
-else
-    nwd_str="ON"
-fi
-printf "\n>>> Models (%s) in %s on %s with NWD-%s Start! <<<\n" "${models[*]}" "$prefix" "${dataset^^}" >>"${log_file}" "$nwd_str"
+
 
 for model in "${models[@]}"; do
-    model_path="$prefix$model"
+    model_name="$prefix$model"
     if [ $test == 1 ]; then
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
-        python value.py --model "$model_path" --dataset "$dataset"
+        python train.py --model "$model_name" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
+        python value.py --model "$model_name" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
         # if model's scale is m, batch should be 8
         if [[ "$model" == *"m" ]];then
             batch=8
         fi
 
-        python train.py --model "$model_path" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch" &&
-        python value.py --model "${model_path}" --dataset "$dataset"
+        python train.py --model "$model_name" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch" &&
+        python value.py --model "$model_name" --dataset "$dataset"
 
         if [[ "$predict" == 1 ]];then
-            python predict.py --model "${model_path}/${dataset}" --source "${source[$dataset]}"
+            python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
         fi
     fi
 done
