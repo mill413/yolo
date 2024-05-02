@@ -39,17 +39,20 @@ def load(model_name: str, dataset: str = "", mode: str = "train"):
     current_time = time.strftime("%H:%M:%S", time.localtime())
     log(f"{split_line} Load model {model_name} at {current_time} {split_line}")
 
-    return YOLO(model_path)
+    model = YOLO(model_path)
+    return model
 
 
 def train(
-        model: str, dataset: str,
+        model_name: str, dataset: str,
         result_dir: str, mode: str = "train",
         epochs=100, exist_ok=False,
         batch=16, device=0, workers=2,
         patience=50
 ):
-    logger = YoloLogger(model_name=f"{model}")
+    model = load(model_name=model_name)
+
+    logger = YoloLogger(model_name=f"{model_name}")
     log = logger.log
     log(f"Start train model on {dataset}.\n" +
         f"Epochs: {epochs}, Batch: {batch}, Workers: {workers}, Exist_ok: {exist_ok}, Device: {device}, " +
@@ -57,7 +60,6 @@ def train(
         f"Save to runs/{result_dir}/{mode}")
 
     try:
-        model = load(model_name=model)
         model.train(
             data=f"./datasets/{dataset}.yaml",
             epochs=epochs,
@@ -73,17 +75,19 @@ def train(
     finally:
         log(f"End train.")
 
+    return model_name
+
 
 def value(
-    model: str, dataset: str,
+    model_name: str, dataset: str,
     result_dir: str, mode: str = "val",
     batch=16, device=0, workers=2, exist_ok=False
 ):
-    logger = YoloLogger(model_name=f"{model}")
+    logger = YoloLogger(model_name=f"{model_name}")
     log = logger.log
     log(f"Start value model on {dataset}.")
 
-    model = load(model_name=model, dataset=dataset, mode="val")
+    model = load(model_name=model_name, dataset=dataset, mode="val")
     metrics = model.val(
         data=f"./datasets/{dataset}.yaml",
         device=device,
@@ -93,7 +97,7 @@ def value(
         exist_ok=exist_ok)
 
     # print value results
-    class_names = model.names
+    class_names = model_name.names
     log(f"|{'Class|':>22s}\t{'Precision|':>11s}\t{'Recall|':>11s}\t{'mAP50|':>11s}\t{'mAP50-95|':>11s}")
     log(f"|{'---:|':>22s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}")
     mean_result = metrics.mean_results()
@@ -111,15 +115,15 @@ def value(
 
 
 def predict(
-        model: str, source: str, dataset: str,
+        model_name: str, source: str, dataset: str,
         result_dir: str, mode: str = "predict",
         save=True,
         show_conf=False, show=False, show_labels=False):
-    logger = YoloLogger(model_name=f"{model}")
+    logger = YoloLogger(model_name=f"{model_name}")
     log = logger.log
     log(f"Start predict on {source} via {result_dir}.")
 
-    model = load(model, "test")
+    model = load(model_name, "test")
     results = model(
         source,
         save=save,

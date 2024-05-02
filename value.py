@@ -17,7 +17,7 @@ model_name = args.model
 project = args.project if not args.project == "" else model_name
 
 value(
-    model=model_name, dataset=args.dataset,
+    model_name=model_name, dataset=args.dataset,
     result_dir=f"{project}/{args.dataset}", mode="val", 
     exist_ok=True)
     

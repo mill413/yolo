@@ -13,7 +13,7 @@ parser.add_argument("--dataset", type=str, dest="dataset",
 args = parser.parse_args()
 
 predict(
-    model=args.model, 
+    model_name=args.model, 
     source=args.source,
     dataset=args.dataset,
     result_dir=f"{args.model}/{args.dataset}", mode="predict")

@@ -115,14 +115,6 @@ while true; do
     esac
 done
 
-# create log file if not exist.
-log_file="./logs/$(date +%Y-%m-%d).log"
-if [ ! -f "${log_file}" ]; then
-    touch "${log_file}"
-fi
-
-
-
 for model in "${models[@]}"; do
     model_name="$prefix$model"
     if [ $test == 1 ]; then
