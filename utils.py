@@ -31,7 +31,7 @@ def load(model_name: str, dataset: str = "", mode: str = "train"):
         case "train":
             model_path = f"./models/{model_name}.yaml"
         case "val" | "test":
-            model_path = f"./runs/{model_path}/train/weights/best.pt"
+            model_path = f"./runs/{model_name}/{dataset}/train/weights/best.pt"
         case _:
             log(f"ERROR occur when loading model with wrong mode {mode}")
             raise Exception(f"Wrong mode {mode}")
@@ -39,6 +39,10 @@ def load(model_name: str, dataset: str = "", mode: str = "train"):
     current_time = time.strftime("%H:%M:%S", time.localtime())
     log(f"{split_line} Load model {model_name} at {current_time} {split_line}")
 
+    if not Path(model_path).exists:
+        log(f"ERROR occur when loading NOT FOUND MODEL {model_path}")
+        raise FileNotFoundError(f"Model {model_path} Not Found!")
+    
     model = YOLO(model_path)
     return model
 
