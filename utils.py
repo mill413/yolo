@@ -79,7 +79,7 @@ def train(
     finally:
         log(f"End train.")
 
-    return model_name
+    return model
 
 
 def value(
@@ -101,7 +101,7 @@ def value(
         exist_ok=exist_ok)
 
     # print value results
-    class_names = model_name.names
+    class_names = model.names
     log(f"|{'Class|':>22s}\t{'Precision|':>11s}\t{'Recall|':>11s}\t{'mAP50|':>11s}\t{'mAP50-95|':>11s}")
     log(f"|{'---:|':>22s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}\t{'---:|':>11s}")
     mean_result = metrics.mean_results()
