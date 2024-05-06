@@ -27,7 +27,7 @@ source=(
 )
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,predict,test,help,v5:,v8:,batch:,predict -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,batch:,predict -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
