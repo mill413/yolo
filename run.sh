@@ -27,7 +27,7 @@ source=(
 )
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,batch:,predict -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,predict,test,help,v5:,v8:,batch:,predict -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -96,7 +96,7 @@ while true; do
             shift 2
             ;;
         --predict)
-            if [ -n "${source[$dataset]}" ];then
+            if [[ -n ${source[$dataset]} ]];then
                 predict=0
             else
                 predict=1
@@ -113,7 +113,7 @@ done
 for model in "${models[@]}"; do
     model_name="$prefix$model"
     if [ $test == 1 ]; then
-        python train.py --model "$model_name" --dataset "$dataset" --epochs 1 --workers 1 --batch 1
+        python train.py --model "$model_name" --dataset "$dataset" --epochs 1 --workers 8 --batch 8
         python value.py --model "$model_name" --dataset "$dataset"
     elif [ $# -eq 0 ]; then
         # if model's scale is m, batch should be 8
@@ -123,9 +123,9 @@ for model in "${models[@]}"; do
 
         python train.py --model "$model_name" --dataset "$dataset" --epochs 200 --workers 8 --batch "$batch" &&
         python value.py --model "$model_name" --dataset "$dataset"
+    fi
 
-        if [[ $predict == 1 ]];then
-            python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
-        fi
+    if [ $predict == 1 ];then
+        python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
     fi
 done
