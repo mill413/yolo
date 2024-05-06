@@ -127,7 +127,7 @@ def predict(
     log = logger.log
     log(f"Start predict on {source} via {result_dir}.")
 
-    model = load(model_name, "test")
+    model = load(model_name,dataset, "test")
     results = model(
         source,
         save=save,
@@ -138,3 +138,7 @@ def predict(
         exist_ok=True,
         line_width=1)
     log(f"End predict.")
+
+
+def heatmap():
+    pass
