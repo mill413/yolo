@@ -10,6 +10,7 @@ from ultralytics.nn.tasks import attempt_load_weights
 from ultralytics.utils.ops import xywh2xyxy, non_max_suppression
 from pytorch_grad_cam.utils.image import show_cam_on_image, scale_cam_image
 from pytorch_grad_cam.activations_and_gradients import ActivationsAndGradients
+from pytorch_grad_cam import GradCAM, HiResCAM
 
 def letterbox(im, new_shape=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True, stride=32):
     # Resize and pad image while meeting stride-multiple constraints
@@ -134,7 +135,7 @@ class yolov8_heatmap:
         method = eval(method)(model, target_layers, use_cuda=device.type == 'cuda')
         method.activations_and_grads = ActivationsAndGradients(model, target_layers, None)
         
-        colors = np.random.uniform(0, 255, size=(len(model_names), 3)).astype(np.int)
+        colors = np.random.uniform(0, 255, size=(len(model_names), 3)).astype(int)
         self.__dict__.update(locals())
     
     def post_process(self, result):
@@ -144,7 +145,7 @@ class yolov8_heatmap:
     def draw_detections(self, box, color, name, img):
         xmin, ymin, xmax, ymax = list(map(int, list(box)))
         cv2.rectangle(img, (xmin, ymin), (xmax, ymax), tuple(int(x) for x in color), 2)
-        cv2.putText(img, str(name), (xmin, ymin - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, tuple(int(x) for x in color), 2, lineType=cv2.LINE_AA)
+        # cv2.putText(img, str(name), (xmin, ymin - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, tuple(int(x) for x in color), 2, lineType=cv2.LINE_AA)
         return img
 
     def renormalize_cam_in_bounding_boxes(self, boxes, image_float_np, grayscale_cam):
@@ -199,21 +200,24 @@ class yolov8_heatmap:
                 self.process(f'{img_path}/{img_path_}', f'{save_path}/{img_path_}')
         else:
             self.process(img_path, f'{save_path}/result.png')
-        
-def get_params():
-    params = {
-        'weight': 'runs/train/exp2/weights/best.pt', # 现在只需要指定权重即可,不需要指定cfg
-        'device': 'cuda:0',
-        'method': 'HiResCAM', # GradCAMPlusPlus, GradCAM, XGradCAM, EigenCAM, HiResCAM, LayerCAM, RandomCAM, EigenGradCAM
-        'layer': [10, 12, 14, 16, 18],
-        'backward_type': 'class', # class, box, all
-        'conf_threshold': 0.2, # 0.2
-        'ratio': 0.02, # 0.02-0.1
-        'show_box': False,
-        'renormalize': True
-    }
-    return params
+
 
 if __name__ == '__main__':
-    model = yolov8_heatmap(**get_params())
-    model(r'/home/hjj/Desktop/dataset/dataset_visdrone/VisDrone2019-DET-test-dev/images', 'result')
+    model_name = "baseline/yolov8s"
+    dataset = "flir"
+    params = {
+        # 现在只需要指定权重即可,不需要指定cfg
+        'weight': 'runs1/runs/baseline/yolov8s/flir/train/weights/best.pt',
+        'device': 'cuda:0',
+        # GradCAMPlusPlus, GradCAM, XGradCAM, EigenCAM, HiResCAM, LayerCAM, RandomCAM, EigenGradCAM
+        'method': 'HiResCAM',
+        'layer': [15, 18, 21],
+        'backward_type': 'all',  # class, box, all
+        'conf_threshold': 0.2,  # 0.2
+        'ratio': 0.02,  # 0.02-0.1
+        'show_box': False,
+        'renormalize': False
+    }
+    model = yolov8_heatmap(**params)
+    model(r"/home/wsy_2022301480/jupyterlab/datasets/FLIR/test/data/v3",
+          f"runs/{model_name}/{dataset}/heatmap")
