@@ -97,9 +97,9 @@ while true; do
             ;;
         --predict)
             if [[ -n ${source[$dataset]} ]];then
-                predict=0
-            else
                 predict=1
+            else
+                predict=0
             fi
             shift
             ;;
