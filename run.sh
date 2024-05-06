@@ -18,7 +18,6 @@ prefix=""
 test=0
 dataset=""
 models=()
-nwd=0
 batch=8
 predict=0
 declare -A source
@@ -28,7 +27,7 @@ source=(
 )
 
 # parse arguments
-args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,nwd,batch:,predict -n "$0" -- "$@")
+args=$(getopt -o thp:d: --long dataset:,prefix:,test,help,v5:,v8:,batch:,predict -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -88,10 +87,6 @@ while true; do
             done
             shift 2
             ;;
-        --nwd)
-            nwd=1
-            shift
-            ;;
         --batch)
             batch="$2"
             if [ "$batch" == "" ]; then
@@ -126,10 +121,10 @@ for model in "${models[@]}"; do
             batch=8
         fi
 
-        python train.py --model "$model_name" --dataset "$dataset" --epochs 200 --workers 16 --batch "$batch" &&
+        python train.py --model "$model_name" --dataset "$dataset" --epochs 200 --workers 8 --batch "$batch" &&
         python value.py --model "$model_name" --dataset "$dataset"
 
-        if [[ "$predict" == 1 ]];then
+        if [[ $predict == 1 ]];then
             python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
         fi
     fi
