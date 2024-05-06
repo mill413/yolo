@@ -1,6 +1,6 @@
-from ultralytics import YOLO
-from utils import predict
 import argparse
+
+from utils import predict
 
 parser = argparse.ArgumentParser(description="Predict model parse arguments.")
 

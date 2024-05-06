@@ -1,5 +1,6 @@
-from utils import train
 import argparse
+
+from utils import train
 
 parser = argparse.ArgumentParser(description="Train model parse arguments.")
 

@@ -1,8 +1,9 @@
-from pathlib import Path
 import time
+import traceback
+from pathlib import Path
+
 from ultralytics import YOLO
 from ultralytics.utils.torch_utils import get_num_params
-import traceback
 
 split_line = "------------------------------------------"
 
@@ -87,11 +88,11 @@ def value(
     result_dir: str, mode: str = "val",
     batch=16, device=0, workers=2, exist_ok=False
 ):
+    model = load(model_name=model_name, dataset=dataset, mode="val")
     logger = YoloLogger(model_name=f"{model_name}")
     log = logger.log
     log(f"Start value model on {dataset}.")
 
-    model = load(model_name=model_name, dataset=dataset, mode="val")
     metrics = model.val(
         data=f"./datasets/{dataset}.yaml",
         device=device,
@@ -123,11 +124,11 @@ def predict(
         result_dir: str, mode: str = "predict",
         save=True,
         show_conf=False, show=False, show_labels=False):
+    model = load(model_name,dataset, "test")
     logger = YoloLogger(model_name=f"{model_name}")
     log = logger.log
     log(f"Start predict on {source} via {result_dir}.")
 
-    model = load(model_name,dataset, "test")
     results = model(
         source,
         save=save,
@@ -140,5 +141,14 @@ def predict(
     log(f"End predict.")
 
 
-def heatmap():
-    pass
+def heatmap(
+        model_name: str, 
+        source: str, 
+        dataset: str):
+    model = load(model_name, dataset, "test")
+    logger = YoloLogger(model_name=f"{model_name}")
+    log = logger.log
+    log(f"Start heatmap of {source} using {model_name}.")
+
+    
+    log(f"End heatmap.")

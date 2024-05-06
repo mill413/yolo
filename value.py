@@ -1,6 +1,6 @@
-from utils import value
 import argparse
-from ultralytics import YOLO
+
+from utils import value
 
 parser = argparse.ArgumentParser(description="Value model parse arguments.")
 
