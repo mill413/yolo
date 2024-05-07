@@ -92,9 +92,9 @@ def generate_pic(
     plt.savefig("runs/"+save_file)
 
 
-lines = []
 colors = ["red", "lightgreen", "blue", "deepskyblue", "violet"]
 random.shuffle(colors)
+lines = []
 for ind, model in enumerate(["baseline", "p234-cbam", "p234-nwd", "cbam-nwd", "p234-cbam-nwd"]):
     lines.append(DataLine(
         f"runs/{model}/yolov8s/visdrone/train/results.csv",
