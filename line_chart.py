@@ -1,11 +1,11 @@
 import csv
 import os
+import random
 from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import MultipleLocator
-import matplotlib.colors
-import random
+
 
 def remove_spaces(file: str):
     with open(file, 'r') as f:
@@ -91,13 +91,14 @@ def generate_pic(
 
     plt.savefig("runs/"+save_file)
 
+
 lines = []
 colors = ["red", "lightgreen", "blue", "deepskyblue", "violet"]
 random.shuffle(colors)
-for ind, model in enumerate(["baseline", "p2", "p234", "nwd"]):
+for ind, model in enumerate(["baseline", "p234-cbam", "p234-nwd", "cbam-nwd", "p234-cbam-nwd"]):
     lines.append(DataLine(
         f"runs/{model}/yolov8s/visdrone/train/results.csv",
-        model.capitalize(),
+        model.upper() if not model == "p234-cbam-nwd" else "ISOD",
         colors[ind]))
 
 generate_pic("Epoch", "Precision", "precision",
