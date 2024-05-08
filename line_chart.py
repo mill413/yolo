@@ -43,8 +43,9 @@ def read_from_csv(csvFile: str):
 
 def draw_line(dataFile: str, dataName: str, lineColor: str, key: str):
     data = read_from_csv(dataFile)
+    data_len = len(data[key])
     plt.plot(
-        range(1, 201), data[key],
+        range(1, data_len+1), data[key],
         color=lineColor, alpha=1,
         linestyle='-', linewidth=1,
         marker='.', markevery=range(1, 201, 10),
@@ -95,10 +96,14 @@ def generate_pic(
 colors = ["red", "lightgreen", "blue", "deepskyblue", "violet"]
 random.shuffle(colors)
 lines = []
-for ind, model in enumerate(["baseline", "p234-cbam", "p234-nwd", "cbam-nwd", "p234-cbam-nwd"]):
+for ind, model in enumerate(["baseline", "p234-cbam", 
+                             "p234-nwd", 
+                            #  "cbam-nwd",
+                               "p234-cbam-nwd"
+                             ]):
     lines.append(DataLine(
-        f"runs/{model}/yolov8s/visdrone/train/results.csv",
-        model.upper() if not model == "p234-cbam-nwd" else "ISOD",
+        f"{'runs1/' if model == 'p234-cbam-nwd' else ''}runs/{model}/yolov8s/visdrone/train/results.csv",
+        model.upper(),
         colors[ind]))
 
 generate_pic("Epoch", "Precision", "precision",
