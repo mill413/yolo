@@ -48,7 +48,7 @@ def draw_line(dataFile: str, dataName: str, lineColor: str, key: str):
         range(1, data_len+1), data[key],
         color=lineColor, alpha=1,
         linestyle='-', linewidth=1,
-        marker='.', markevery=range(1, 201, 10),
+        marker='.', markevery=range(1, data_len+1, 10),
         label=dataName
     )
 
