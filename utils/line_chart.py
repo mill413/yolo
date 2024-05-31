@@ -96,13 +96,9 @@ def generate_pic(
 colors = ["red", "lightgreen", "blue", "deepskyblue", "violet"]
 random.shuffle(colors)
 lines = []
-for ind, model in enumerate(["baseline", "p234-cbam", 
-                             "p234-nwd", 
-                            #  "cbam-nwd",
-                               "p234-cbam-nwd"
-                             ]):
+for ind, model in enumerate([]):
     lines.append(DataLine(
-        f"{'runs1/' if model == 'p234-cbam-nwd' else ''}runs/{model}/yolov8s/visdrone/train/results.csv",
+        f"runs/{model}/yolov8s/visdrone/train/results.csv",
         model.upper(),
         colors[ind]))
 
