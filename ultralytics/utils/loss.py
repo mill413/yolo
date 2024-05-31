@@ -67,7 +67,7 @@ class BboxLoss(nn.Module):
         self.reg_max = reg_max
         self.use_dfl = use_dfl
         self.NWD = use_nwd
-        self.SIOU = siou
+        self.siou = siou
 
     def forward(self, pred_dist, pred_bboxes, anchor_points, target_bboxes, target_scores, target_scores_sum, fg_mask):
         """IoU loss."""
