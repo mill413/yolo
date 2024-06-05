@@ -914,30 +914,30 @@ class Format:
 
         return masks, instances, cls
 
-class GBS:
-    def __init__(self, bg_path) -> None:
-        self.bg = bg_path
+# class GBS:
+#     def __init__(self, bg_path) -> None:
+#         self.bg = bg_path
 
-    def __call__(self, labels) -> random.Any:
-        current_image = labels['img']
-        bg_image = cv2.imread(self.bg)
-        NGBSChannel = self.GBSChannel(current_image, bg_image)
+#     def __call__(self, labels) -> random.Any:
+#         current_image = labels['img']
+#         bg_image = cv2.imread(self.bg)
+#         NGBSChannel = self.GBSChannel(current_image, bg_image)
 
-        B, G, R = cv2.split(current_image)
-        labels['img'] = cv2.merge((B, G, R, NGBSChannel))
+#         B, G, R = cv2.split(current_image)
+#         labels['img'] = cv2.merge((B, G, R, NGBSChannel))
 
-    def GBSChannel(self, img, bg_img, normalized_lumin=35):
-        gray_current = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        gray_bg = cv2.cvtColor(bg_img, cv2.COLOR_BGR2GRAY)
+#     def GBSChannel(self, img, bg_img, normalized_lumin=35):
+#         gray_current = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#         gray_bg = cv2.cvtColor(bg_img, cv2.COLOR_BGR2GRAY)
 
-        gray_bg_subtract = cv2.subtract(gray_current, gray_bg)
+#         gray_bg_subtract = cv2.subtract(gray_current, gray_bg)
 
-        ave_lumin = np.mean(gray_bg_subtract)
-        subtract_lumin = normalized_lumin - ave_lumin
+#         ave_lumin = np.mean(gray_bg_subtract)
+#         subtract_lumin = normalized_lumin - ave_lumin
 
-        normalized_gray_bg_subtract = gray_bg_subtract + int(subtract_lumin)
+#         normalized_gray_bg_subtract = gray_bg_subtract + int(subtract_lumin)
 
-        return normalized_gray_bg_subtract
+#         return normalized_gray_bg_subtract
 
 def v8_transforms(dataset, imgsz, hyp, stretch=False):
     """Convert images to a size suitable for YOLOv8 training."""
