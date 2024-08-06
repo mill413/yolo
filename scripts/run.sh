@@ -19,6 +19,8 @@ test=0
 dataset=""
 models=()
 batch=8
+train=1
+val=1
 predict=0
 epochs=200
 declare -A source
@@ -26,10 +28,11 @@ source=(
     [visdrone]="../datasets/VisDrone/VisDrone2019-DET-test-dev/images/"
     [flir]="../datasets/FLIR/test/data/"
     [auav]="../datasets/anti-uav/images/test/20190925_124000_1_6"
+    [dair]="../datasets/dair/test"
 )
 
 # parse arguments
-args=$(getopt -o thp:d:e --long dataset:,prefix:,test,help,v5:,v8:,batch:,predict,epochs -n "$0" -- "$@")
+args=$(getopt -o thp:d:e --long dataset:,prefix:,test,help,v5:,v8:,batch:,predict,epochs,train:,val: -n "$0" -- "$@")
 eval set -- "${args}"
 while true; do
     case "$1" in 
@@ -101,6 +104,14 @@ while true; do
             fi
             shift 2
             ;;
+        --train)
+            train="$2"
+            shift 2
+            ;;
+        --val)
+            val="$2"
+            shift 2
+            ;;
         --predict)
             if [[ -n ${source[$dataset]} ]];then
                 predict=1
@@ -126,9 +137,16 @@ for model in "${models[@]}"; do
         if [[ "$model" == *"m" ]];then
             batch=8
         fi
+        
+        if [ $train == 1 ];then
+            python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
+        fi
+        if [ $val == 1 ];then
+            python predict.py --model "${model_name}" --dataset "${dataset}" --source "${source[$dataset]}"
+        fi
 
-        python train.py --model "$model_name" --dataset "$dataset" --epochs "$epochs" --workers 8 --batch "$batch" &&
-        python value.py --model "$model_name" --dataset "$dataset"
+        # python train.py --model "$model_name" --dataset "$dataset" --epochs "$epochs" --workers 32 --batch "$batch" &&
+        # python value.py --model "$model_name" --dataset "$dataset"
     fi
 
     if [ $predict == 1 ];then
